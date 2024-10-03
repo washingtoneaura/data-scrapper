@@ -10,7 +10,7 @@ import time
 import random
 
 # Set the path to your EdgeDriver executable
-edge_driver_path = 'C:/Users/User/Python/data-scrapping/msedgedriver.exe'
+edge_driver_path = 'C:/Users/Aura/data-scrapper/data-scrapper/msedgedriver.exe'
 
 # Initialize Edge options
 edge_options = EdgeOptions()
@@ -25,7 +25,7 @@ driver = webdriver.Edge(service=edge_service, options=edge_options)
 
 # List of target URLs to scrape
 urls = [
-    'https://www.avvo.com/expungement-lawyer/fl.html',
+    'https://www.avvo.com/expungement-lawyer/ia.html',
     # Add more URLs as needed
 ]
 
@@ -96,13 +96,18 @@ def scrape_attorneys_from_page(soup):
                 phone = phone.find('span', class_='overridable-lawyer-phone-copy').text if phone else 'N/A'
                 website = profile_soup.find('a', class_='website-ctrl')
                 website = website['href'] if website else 'N/A'
+
+                # Extracting firm_name2 (second firm name from profile details) 
+                firm_name2 = profile_soup.find('span', class_='contact-firm').text.strip() if profile_soup.find('span', class_='contact-firm') else 'N/A'
+
                 
                 # Update attorney data with additional details
                 attorney_data.update({
                     'Website': website,
                     'Phone': phone,
                     'State Bars Licensed In': state_bars,
-                    'Legal Areas of Expertise': legal_areas
+                    'Legal Areas of Expertise': legal_areas,
+                    'Name of Firm2': firm_name2
                 })
 
             except Exception as e:

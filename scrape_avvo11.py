@@ -9,7 +9,7 @@ import pandas as pd
 import os
 
 # Set the path to your EdgeDriver executable
-edge_driver_path = 'C:/Users/User/Python/data-scrapping/msedgedriver.exe'
+edge_driver_path = 'C:/Users/Aura/data-scrapper/data-scrapper/msedgedriver.exe'
 
 # Path to your local spreadsheet file (create this file beforehand or ensure it's available)
 spreadsheet_path = 'attorneys_data.xlsx'

@@ -28,7 +28,7 @@ driver = webdriver.Edge(service=edge_service, options=edge_options)
 
 # List of target URLs to scrape
 urls = [
-    'https://www.avvo.com/expungement-lawyer/ct.html',
+    'https://www.avvo.com/expungement-lawyer/nd.html',
     # Add more URLs as needed
 ]
 
