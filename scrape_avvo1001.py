@@ -25,7 +25,7 @@ driver = webdriver.Edge(service=edge_service, options=edge_options)
 
 # List of target URLs to scrape
 urls = [
-    'https://www.avvo.com/federal-crime-lawyer/ca.html',
+    'https://www.avvo.com/federal-crime-lawyer/ar.html',
     # Add more URLs as needed
 ]
 
@@ -55,8 +55,6 @@ def scrape_attorneys_from_page(soup):
         details_section = attorney.find_next('div', class_='body')
         years_licensed = details_section.find('div', class_='license').text if details_section and details_section.find('div', class_='license') else 'N/A'
         firm_name = details_section.find('div', class_='text-muted').text if details_section and details_section.find('div', class_='text-muted') else 'N/A'
-        #practice_areas = details_section.find('div', class_='practice').text if details_section and details_section.find('div', class_='practice') else 'N/A'
-
 
         # Extract phone number and website from the ctas ctas-links div
         ctas_div = attorney.find('div', class_='ctas ctas-links')
@@ -73,7 +71,6 @@ def scrape_attorneys_from_page(soup):
             'Attorney Name': name,
             'Profile URL': profile_url,
             'Name of Firm': firm_name,
-            #'Practice Areas': practice_areas,
             'Phone1': phone1,
             'Website1': website1,
             'Email': 'N/A',
@@ -85,83 +82,81 @@ def scrape_attorneys_from_page(soup):
             'State Bars Licensed In': 'N/A',
             'Legal Areas of Expertise': 'N/A',
         }
-                
-        # Click on the attorney's profile link to get more details
-        profile_link = header_div.find('a', class_='gtm-profile-link search-result-lawyer-name')
-        if profile_link:
-            driver.get(profile_link['href'])
-            try:
-                # Wait for the profile page to load and for the necessary elements to be present
-                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'profile-location')))
-                profile_html = driver.page_source
-                profile_soup = BeautifulSoup(profile_html, 'html.parser')
 
-                # Extracting state bars and legal areas of expertise
-                state_bars = profile_soup.find('span', class_='profile-location').text if profile_soup.find('span', class_='profile-location') else 'N/A'
-                legal_areas = profile_soup.find('span', class_='profile-practice-area').text if profile_soup.find('span', class_='profile-practice-area') else 'N/A'
+        # Only click the profile link if the website1 is not 'N/A'
+        if website1 != 'N/A' and profile_url != 'N/A':
+            profile_link = header_div.find('a', class_='gtm-profile-link search-result-lawyer-name')
+            if profile_link:
+                driver.get(profile_link['href'])
+                try:
+                    # Wait for the profile page to load and for the necessary elements to be present
+                    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'profile-location')))
+                    profile_html = driver.page_source
+                    profile_soup = BeautifulSoup(profile_html, 'html.parser')
 
-                # Extracting phone number and website from CTAs
-                phone = profile_soup.find('a', class_='overridable-lawyer-phone-link')
-                phone = phone.find('span', class_='overridable-lawyer-phone-copy').text if phone else 'N/A'
-                website = profile_soup.find('a', class_='website-ctrl')
-                website = website['href'] if website else 'N/A'
+                    # Extracting state bars and legal areas of expertise
+                    state_bars = profile_soup.find('span', class_='profile-location').text if profile_soup.find('span', class_='profile-location') else 'N/A'
+                    legal_areas = profile_soup.find('span', class_='profile-practice-area').text if profile_soup.find('span', class_='profile-practice-area') else 'N/A'
 
-                # Extracting firm_name2 (second firm name from profile details) 
-                firm_name2 = profile_soup.find('span', class_='contact-firm').text.strip() if profile_soup.find('span', class_='contact-firm') else 'N/A'
-                
-                # Extract practice areas
-                practice_area_names = []
+                    # Extracting phone number and website from CTAs
+                    phone = profile_soup.find('a', class_='overridable-lawyer-phone-link')
+                    phone = phone.find('span', class_='overridable-lawyer-phone-copy').text if phone else 'N/A'
+                    website = profile_soup.find('a', class_='website-ctrl')
+                    website = website['href'] if website else 'N/A'
 
-                # Navigate through the necessary divs to find the ol with class 'chart-legend-list'
-                profile_sections = profile_soup.find('div', class_='profile-content')
-                if profile_sections:
-                    pa_graphic_wrapper = profile_sections.find('div', class_='profile-sections')
-                    if pa_graphic_wrapper:
-                        practice_areas_list = pa_graphic_wrapper.find('ol', class_='chart-legend-list')
-                        
-                        if practice_areas_list:
-                            for specialty in practice_areas_list.find_all('li', class_='js-specialty'):
-                                # Check if all necessary elements exist before trying to access them
-                                try:
-                                    # Get the practice area name directly from the first <div> inside the <a> tag
-                                    practice_area_name = specialty.find('a').find('div').text.strip()
-                                    practice_area_names.append(practice_area_name)
-                                except (AttributeError, IndexError) as e:
-                                    print(f"Error extracting practice area: {e}")
-                                    continue
+                    # Extracting firm_name2 (second firm name from profile details) 
+                    firm_name2 = profile_soup.find('span', class_='contact-firm').text.strip() if profile_soup.find('span', class_='contact-firm') else 'N/A'
+                    
+                    # Extract practice areas
+                    practice_area_names = []
+                    profile_sections = profile_soup.find('div', class_='profile-content')
+                    if profile_sections:
+                        pa_graphic_wrapper = profile_sections.find('div', class_='profile-sections')
+                        if pa_graphic_wrapper:
+                            practice_areas_list = pa_graphic_wrapper.find('ol', class_='chart-legend-list')
+                            
+                            if practice_areas_list:
+                                for specialty in practice_areas_list.find_all('li', class_='js-specialty'):
+                                    try:
+                                        practice_area_name = specialty.find('a').find('div').text.strip()
+                                        practice_area_names.append(practice_area_name)
+                                    except (AttributeError, IndexError) as e:
+                                        print(f"Error extracting practice area: {e}")
+                                        continue
 
-                # Join all practice area names into a single string
-                practice_areas_str = ', '.join(practice_area_names) if practice_area_names else 'N/A'
+                    # Join all practice area names into a single string
+                    practice_areas_str = ', '.join(practice_area_names) if practice_area_names else 'N/A'
 
-                # Update attorney data with additional details
-                attorney_data.update({
-                    'Website': website,
-                    'Phone': phone,
-                    'State Bars Licensed In': state_bars,
-                    'Legal Areas of Expertise': legal_areas,
-                    'Name of Firm2': firm_name2,
-                    'Practice Areas from Profile': practice_areas_str
-                })
+                    # Update attorney data with additional details
+                    attorney_data.update({
+                        'Website': website,
+                        'Phone': phone,
+                        'State Bars Licensed In': state_bars,
+                        'Legal Areas of Expertise': legal_areas,
+                        'Name of Firm2': firm_name2,
+                        'Practice Areas from Profile': practice_areas_str
+                    })
 
-            except Exception as e:
-                print(f"Error retrieving profile details for {name}: {e}")
+                except Exception as e:
+                    print(f"Error retrieving profile details for {name}: {e}")
 
-            # Append the full details of the attorney
-            attorneys.append(attorney_data)
+                # Append the full details of the attorney
+                attorneys.append(attorney_data)
 
-            # Go back to the previous page
-            driver.back()
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'header')))  # Wait until the previous page is loaded
+                # Go back to the previous page
+                driver.back()
+                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'header')))  # Wait until the previous page is loaded
         else:
-            attorneys.append(attorney_data)  # Append basic data if no profile link
+            if website1 != 'N/A':  # Append only if website1 is not 'N/A'
+                attorneys.append(attorney_data)  # Append basic data if no profile link or website is 'N/A'
 
-# Iterate through each URL
+# Main scraping loop for each URL
 for url in urls:
     while True:
         driver.get(url)
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'header')))  # Wait for the page to load
         
-         # Random delay to reduce detection risk
+        # Random delay to reduce detection risk
         time.sleep(random.uniform(3, 7))
 
         # Get the page source and parse it with BeautifulSoup
@@ -186,6 +181,6 @@ driver.quit()
 df = pd.DataFrame(attorneys)
 
 # Save the data to a CSV file
-df.to_csv('attorneys_data04.csv', index=False)
+df.to_csv('attorneys_data4.csv', index=False)
 
-print('Data scraping complete. Results saved to attorneys_data04.csv.')
+print('Data scraping complete. Results saved to attorneys_data4.csv.')
