@@ -17,6 +17,9 @@ edge_options = EdgeOptions()
 edge_options.add_argument('--disable-gpu')
 edge_options.add_argument('--window-size=1920,1080')
 
+# Set a realistic User-Agent
+edge_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36")
+
 # Create Edge service instance
 edge_service = EdgeService(executable_path=edge_driver_path)
 
@@ -31,6 +34,17 @@ urls = [
 
 # Initialize a list to hold all attorney data
 attorneys = []
+
+# Function to introduce random human-like delays
+def random_sleep(min_seconds, max_seconds):
+    time.sleep(random.uniform(min_seconds, max_seconds))
+
+# Function to simulate mouse movement (optional)
+def simulate_mouse_movement():
+    # Randomly move the mouse to a position within the viewport
+    action = webdriver.ActionChains(driver)
+    action.move_by_offset(random.randint(0, 1920), random.randint(0, 1080)).perform()
+    random_sleep(0.1, 0.5)  # Small pause after movement
 
 # Function to scrape data from a single page
 def scrape_attorneys_from_page(soup):
@@ -78,6 +92,9 @@ def scrape_attorneys_from_page(soup):
         profile_link = header_div.find('a', class_='gtm-profile-link search-result-lawyer-name')
         if profile_link:
             driver.get(profile_link['href'])
+            random_sleep(2, 5)  # Random wait after navigating to profile page
+            simulate_mouse_movement()  # Optional mouse movement
+            
             try:
                 # Wait for the profile page to load and for the necessary elements to be present
                 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'profile-location')))
@@ -110,6 +127,8 @@ def scrape_attorneys_from_page(soup):
 
             # Go back to the previous page
             driver.back()
+            random_sleep(2, 5)  # Random wait after going back
+            simulate_mouse_movement()  # Optional mouse movement
             WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'header')))  # Wait until the previous page is loaded
         else:
             attorneys.append(attorney_data)  # Append basic data if no profile link
@@ -120,8 +139,8 @@ for url in urls:
         driver.get(url)
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'header')))  # Wait for the page to load
         
-         # Random delay to reduce detection risk
-        time.sleep(random.uniform(3, 7))
+        # Random delay to reduce detection risk
+        random_sleep(3, 7)
 
         # Get the page source and parse it with BeautifulSoup
         html = driver.page_source
@@ -135,6 +154,7 @@ for url in urls:
         next_page_element = pagination.find('a', rel='next') if pagination else None
         if next_page_element:
             url = 'https://www.avvo.com' + next_page_element['href']  # Prepend base URL
+            random_sleep(2, 4)  # Random wait before loading the next page
         else:
             break  # No next page, exit the loop
 
@@ -145,6 +165,6 @@ driver.quit()
 df = pd.DataFrame(attorneys)
 
 # Save the data to a CSV file
-df.to_csv('attorneys_data4.csv', index=False)
+df.to_csv('attorneys_data001.csv', index=False)
 
-print('Data scraping complete. Results saved to attorneys_data4.csv.')
+print('Data scraping complete. Results saved to attorneys_data001.csv.')

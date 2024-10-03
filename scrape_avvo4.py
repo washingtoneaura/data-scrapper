@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 # Set the path to your EdgeDriver executable
-edge_driver_path = 'C:/Users/User/Python/data-scrapping/msedgedriver.exe'
+edge_driver_path = 'C:/Users/Aura/data-scrapper/data-scrapper/msedgedriver.exe'
 
 # Initialize Edge options
 edge_options = EdgeOptions()
@@ -24,16 +24,16 @@ driver = webdriver.Edge(service=edge_service, options=edge_options)
 # List of target URLs to scrape
 urls = [
     'https://www.avvo.com/expungement-lawyer/al.html',
-    'https://www.avvo.com/expungement-lawyer/az.html',
-    'https://www.avvo.com/expungement-lawyer/ar.html',
-    'https://www.avvo.com/expungement-lawyer/ca.html',
-    'https://www.avvo.com/expungement-lawyer/co.html',
-    'https://www.avvo.com/expungement-lawyer/ct.html',
-    'https://www.avvo.com/expungement-lawyer/de.html',
-    'https://www.avvo.com/expungement-lawyer/fl.html',
-    'https://www.avvo.com/expungement-lawyer/ga.html',
-    'https://www.avvo.com/expungement-lawyer/hi.html',
-    'https://www.avvo.com/expungement-lawyer/id.html',
+    #'https://www.avvo.com/expungement-lawyer/az.html',
+    #'https://www.avvo.com/expungement-lawyer/ar.html',
+    #'https://www.avvo.com/expungement-lawyer/ca.html',
+    #'https://www.avvo.com/expungement-lawyer/co.html',
+    #'https://www.avvo.com/expungement-lawyer/ct.html',
+    #'https://www.avvo.com/expungement-lawyer/de.html',
+    #'https://www.avvo.com/expungement-lawyer/fl.html',
+    #'https://www.avvo.com/expungement-lawyer/ga.html',
+    #'https://www.avvo.com/expungement-lawyer/hi.html',
+    #'https://www.avvo.com/expungement-lawyer/id.html',
     # Add more URLs as needed
 ]
 
