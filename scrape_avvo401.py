@@ -10,7 +10,7 @@ import time
 import random
 
 # Set the path to your EdgeDriver executable
-edge_driver_path = 'C:/Users/Aura/data-scrapper/data-scrapper/msedgedriver.exe'
+edge_driver_path = 'C:/Users/User/Python/data-scrapping/msedgedriver.exe'
 
 # Initialize Edge options
 edge_options = EdgeOptions()
@@ -25,7 +25,7 @@ driver = webdriver.Edge(service=edge_service, options=edge_options)
 
 # List of target URLs to scrape
 urls = [
-    'https://www.avvo.com/expungement-lawyer/la.html',
+    'https://www.avvo.com/expungement-lawyer/fl.html',
     # Add more URLs as needed
 ]
 
@@ -47,6 +47,8 @@ def scrape_attorneys_from_page(soup):
         details_section = attorney.find_next('div', class_='body')
         years_licensed = details_section.find('div', class_='license').text if details_section and details_section.find('div', class_='license') else 'N/A'
         firm_name = details_section.find('div', class_='text-muted').text if details_section and details_section.find('div', class_='text-muted') else 'N/A'
+        practice_areas = details_section.find('div', class_='practice').text if details_section and details_section.find('div', class_='practice') else 'N/A'
+
 
         # Extract phone number and website from the ctas ctas-links div
         ctas_div = attorney.find('div', class_='ctas ctas-links')
@@ -62,6 +64,7 @@ def scrape_attorneys_from_page(soup):
         attorney_data = {
             'Attorney Name': name,
             'Name of Firm': firm_name,
+            'Practice Areas': practice_areas,
             'Phone1': phone1,
             'Website1': website1,
             'Email': 'N/A',
