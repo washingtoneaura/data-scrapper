@@ -26,20 +26,57 @@ driver = webdriver.Edge(service=edge_service, options=edge_options)
 
 # List of target URLs to scrape
 urls = [
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/or.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/pa.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/ri.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/sc.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/sd.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/tn.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/tx.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/ut.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/vt.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/va.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/wa.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/wv.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/wi.html',
-    'https://www.avvo.com/ethics-professional-responsibility-lawyer/wy.html',
+    'https://www.avvo.com/family-lawyer/ak.html',
+    'https://www.avvo.com/family-lawyer/al.html',
+    'https://www.avvo.com/family-lawyer/az.html',
+    'https://www.avvo.com/family-lawyer/ar.html',
+    'https://www.avvo.com/family-lawyer/ca.html',
+    'https://www.avvo.com/family-lawyer/co.html',
+    'https://www.avvo.com/family-lawyer/ct.html',
+    'https://www.avvo.com/family-lawyer/de.html',
+    'https://www.avvo.com/family-lawyer/dc.html',
+    'https://www.avvo.com/family-lawyer/fl.html',
+    'https://www.avvo.com/family-lawyer/ga.html',
+    'https://www.avvo.com/family-lawyer/hi.html',
+    'https://www.avvo.com/family-lawyer/id.html',
+    'https://www.avvo.com/family-lawyer/il.html',
+    'https://www.avvo.com/family-lawyer/in.html',
+    'https://www.avvo.com/family-lawyer/ia.html',
+    'https://www.avvo.com/family-lawyer/ks.html',
+    'https://www.avvo.com/family-lawyer/ky.html',
+    'https://www.avvo.com/family-lawyer/la.html',
+    'https://www.avvo.com/family-lawyer/me.html',
+    'https://www.avvo.com/family-lawyer/md.html',
+    'https://www.avvo.com/family-lawyer/ma.html',
+    'https://www.avvo.com/family-lawyer/mi.html',
+    'https://www.avvo.com/family-lawyer/mn.html',
+    'https://www.avvo.com/family-lawyer/ms.html',
+    'https://www.avvo.com/family-lawyer/mo.html',
+    'https://www.avvo.com/family-lawyer/mt.html',
+    'https://www.avvo.com/family-lawyer/ne.html',
+    'https://www.avvo.com/family-lawyer/nv.html',
+    'https://www.avvo.com/family-lawyer/nh.html',
+    'https://www.avvo.com/family-lawyer/nj.html',
+    'https://www.avvo.com/family-lawyer/nm.html',
+    'https://www.avvo.com/family-lawyer/ny.html',
+    'https://www.avvo.com/family-lawyer/nc.html',
+    'https://www.avvo.com/family-lawyer/nd.html',
+    'https://www.avvo.com/family-lawyer/oh.html',
+    'https://www.avvo.com/family-lawyer/ok.html',
+    'https://www.avvo.com/family-lawyer/or.html',
+    'https://www.avvo.com/family-lawyer/pa.html',
+    'https://www.avvo.com/family-lawyer/ri.html',
+    'https://www.avvo.com/family-lawyer/sc.html',
+    'https://www.avvo.com/family-lawyer/sd.html',
+    'https://www.avvo.com/family-lawyer/tn.html',
+    'https://www.avvo.com/family-lawyer/tx.html',
+    'https://www.avvo.com/family-lawyer/ut.html',
+    'https://www.avvo.com/family-lawyer/vt.html',
+    'https://www.avvo.com/family-lawyer/va.html',
+    'https://www.avvo.com/family-lawyer/wa.html',
+    'https://www.avvo.com/family-lawyer/wv.html',
+    'https://www.avvo.com/family-lawyer/wi.html',
+    'https://www.avvo.com/family-lawyer/wy.html',
     #Add more URLs as needed
 ]
 
@@ -202,6 +239,6 @@ driver.quit()
 df = pd.DataFrame(attorneys)
 
 # Save the data to a CSV file
-df.to_csv('attorneys_data4.csv', index=False)
+df.to_csv('attorneys_data_1.csv', index=False)
 
-print('Data scraping complete. Results saved to attorneys_data4.csv.')
+print('Data scraping complete. Results saved to attorneys_data_1.csv.')
