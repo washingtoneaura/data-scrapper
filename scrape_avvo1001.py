@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 import random
+import re
 
 # Set the path to your EdgeDriver executable
 edge_driver_path = 'C:/Users/Aura/Desktop/data-scrapper/msedgedriver.exe'
@@ -25,8 +26,12 @@ driver = webdriver.Edge(service=edge_service, options=edge_options)
 
 # List of target URLs to scrape
 urls = [
-    'https://www.avvo.com/federal-crime-lawyer/ar.html',
-    # Add more URLs as needed
+    'https://www.avvo.com/ethics-professional-responsibility-lawyer/dc.html',
+    'https://www.avvo.com/ethics-professional-responsibility-lawyer/fl.html',
+    'https://www.avvo.com/ethics-professional-responsibility-lawyer/ga.html',
+    'https://www.avvo.com/ethics-professional-responsibility-lawyer/hi.html',
+    'https://www.avvo.com/ethics-professional-responsibility-lawyer/id.html',
+    #Add more URLs as needed
 ]
 
 # Initialize a list to hold all attorney data
@@ -54,6 +59,12 @@ def scrape_attorneys_from_page(soup):
         # Extract details section for additional info
         details_section = attorney.find_next('div', class_='body')
         years_licensed = details_section.find('div', class_='license').text if details_section and details_section.find('div', class_='license') else 'N/A'
+        years_licensed_text = details_section.find('div', class_='license').text if details_section and details_section.find('div', class_='license') else 'N/A'
+        
+        # Use regular expression to find the number in years_licensed_text
+        years_licensed_number = re.search(r'\d+', years_licensed_text)
+        yearsLicensed = years_licensed_number.group(0) if years_licensed_number else 'N/A'
+
         firm_name = details_section.find('div', class_='text-muted').text if details_section and details_section.find('div', class_='text-muted') else 'N/A'
 
         # Extract phone number and website from the ctas ctas-links div
@@ -75,6 +86,7 @@ def scrape_attorneys_from_page(soup):
             'Website1': website1,
             'Email': 'N/A',
             'Licensed Number of Years': years_licensed,
+            'Licensed Years Only': yearsLicensed,
             'Rating': rating,
             'Reviews Count': reviews_count,
             'Phone': 'N/A',
